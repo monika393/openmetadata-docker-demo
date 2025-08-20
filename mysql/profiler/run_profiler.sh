@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # Script to run MySQL data profiler for OpenMetadata
-# This script uses the OpenMetadata profiler workflow to analyze data quality and statistics
+# This script uses the OpenMetadata ingestion framework to profile MySQL data
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Starting MySQL data profiler..."
 
@@ -40,7 +43,7 @@ fi
 
 # Copy the YAML configuration to the ingestion container
 echo "Copying configuration to ingestion container..."
-docker cp mysql_profiler.yaml openmetadata_ingestion:/opt/airflow/dags/
+docker cp "$SCRIPT_DIR/mysql_profiler.yaml" openmetadata_ingestion:/opt/airflow/dags/
 
 # Run the profiler using the container
 echo "Running data profiler..."

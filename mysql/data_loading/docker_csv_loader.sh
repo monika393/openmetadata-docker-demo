@@ -3,15 +3,18 @@
 # Script to load CSV data into MySQL container
 # This script copies CSV files and load script to the container, then executes it
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 echo "Starting CSV to MySQL load process..."
 
 # Copy CSV files to the container
 echo "Copying CSV files to container..."
-docker cp csv openmetadata_mysql:/csv
+docker cp ../csv openmetadata_mysql:/csv
 
 # Copy the load script to the container
 echo "Copying load script to container..."
-docker cp container_mysql_loader.sh openmetadata_mysql:/root/load.sh
+docker cp "$SCRIPT_DIR/container_mysql_loader.sh" openmetadata_mysql:/root/load.sh
 
 # Execute the load script inside the container
 echo "Executing load script inside container..."

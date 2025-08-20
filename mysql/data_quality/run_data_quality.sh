@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Script to run data quality tests for all MySQL tables
-# This script runs data quality tests for customers, products, sales, and sales report tables
+# Script to run MySQL data quality tests for OpenMetadata
+# This script uses the OpenMetadata test suite framework to validate data quality
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Starting MySQL data quality tests..."
 
@@ -26,6 +29,7 @@ echo "Testing MySQL connection from ingestion container..."
 if ! docker exec openmetadata_ingestion mysql -h openmetadata_mysql -u root -ppassword -e "SELECT 1;" > /dev/null 2>&1; then
     echo "WARNING: MySQL connection test failed from ingestion container"
     echo "This might cause issues with data quality tests"
+    echo "You may need to run the CSV loader script first to configure MySQL users"
 fi
 
 # Check if ingestion container is running, start it if not
@@ -33,22 +37,23 @@ echo "Checking if OpenMetadata ingestion container is running..."
 if ! docker ps | grep -q openmetadata_ingestion; then
     echo "Starting OpenMetadata ingestion container..."
     docker start openmetadata_ingestion
+    # Wait a moment for the container to fully start
     sleep 5
 fi
 
-# Function to run data quality tests for a table
+# Function to run tests for a specific table
 run_tests() {
-    local config_file=$1
-    local table_name=$2
+    local yaml_file="$1"
+    local table_name="$2"
     
     echo ""
     echo "Running data quality tests for $table_name..."
     
     # Copy the YAML configuration to the ingestion container
-    docker cp "$config_file" openmetadata_ingestion:/opt/airflow/dags/
+    docker cp "$SCRIPT_DIR/$yaml_file" openmetadata_ingestion:/opt/airflow/dags/
     
-    # Run the data quality tests
-    docker exec openmetadata_ingestion metadata test -c "/opt/airflow/dags/$config_file"
+    # Run the data quality tests using the container
+    docker exec openmetadata_ingestion metadata test -c "/opt/airflow/dags/$yaml_file"
     
     if [ $? -eq 0 ]; then
         echo "✅ Data quality tests for $table_name completed successfully"

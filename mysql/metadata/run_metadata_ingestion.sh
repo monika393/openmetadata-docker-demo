@@ -3,6 +3,9 @@
 # Script to run MySQL metadata ingestion for OpenMetadata
 # This script uses the OpenMetadata ingestion framework to extract metadata from MySQL
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 echo "Starting MySQL metadata ingestion..."
 
 # Check if OpenMetadata server is running
@@ -40,7 +43,7 @@ fi
 
 # Copy the YAML configuration to the ingestion container
 echo "Copying configuration to ingestion container..."
-docker cp mysql_metadata_ingestion.yaml openmetadata_ingestion:/opt/airflow/dags/
+docker cp "$SCRIPT_DIR/mysql_metadata_ingestion.yaml" openmetadata_ingestion:/opt/airflow/dags/
 
 # Run the metadata ingestion using the container
 echo "Running metadata ingestion..."

@@ -1,7 +1,10 @@
 #!/bin/bash
 
 # Script to run MySQL lineage ingestion for OpenMetadata
-# This script extracts data lineage information from MySQL
+# This script uses the OpenMetadata ingestion framework to capture data lineage
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Starting MySQL lineage ingestion..."
 
@@ -40,7 +43,7 @@ fi
 
 # Copy the YAML configuration to the ingestion container
 echo "Copying configuration to ingestion container..."
-docker cp mysql_lineage_simple.yaml openmetadata_ingestion:/opt/airflow/dags/
+docker cp "$SCRIPT_DIR/mysql_lineage_simple.yaml" openmetadata_ingestion:/opt/airflow/dags/
 
 # Run the lineage ingestion using the container
 echo "Running lineage ingestion..."
