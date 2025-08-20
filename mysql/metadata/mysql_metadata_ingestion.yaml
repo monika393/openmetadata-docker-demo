@@ -1,0 +1,46 @@
+source:
+  type: mysql
+  serviceName: retail_mysql
+  serviceConnection:
+    config:
+      type: Mysql
+      username: root
+      authType:
+        password: password
+      hostPort: openmetadata_mysql:3306
+      databaseSchema: retail_demo
+      connectionOptions: {}
+      connectionArguments: {}
+      supportsMetadataExtraction: true
+  sourceConfig:
+    config:
+      type: DatabaseMetadata
+      markDeletedTables: true
+      markDeletedStoredProcedures: true
+      includeTables: true
+      includeViews: true
+      includeStoredProcedures: true
+      includeTags: true
+      databaseFilterPattern:
+        includes:
+          - retail_demo
+      schemaFilterPattern:
+        includes:
+          - retail_demo
+      tableFilterPattern:
+        includes:
+          - customers
+          - products
+          - sales
+          - sales_report_daily_customer
+          - sales_report_daily_customer_v
+sink:
+  type: metadata-rest
+  config: {}
+workflowConfig:
+  openMetadataServerConfig:
+    hostPort: http://openmetadata_server:8585/api
+    authProvider: openmetadata
+    securityConfig:
+      jwtToken: "eyJraWQiOiJHYjM4OWEtOWY3Ni1nZGpzLWE5MmotMDI0MmJrOTQzNTYiLCJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcGVuLW1ldGFkYXRhLm9yZyIsInN1YiI6ImluZ2VzdGlvbi1ib3QiLCJyb2xlcyI6WyJJbmdlc3Rpb25Cb3RSb2xlIl0sImVtYWlsIjoiaW5nZXN0aW9uLWJvdEBvcGVuLW1ldGFkYXRhLm9yZyIsImlzQm90Ijp0cnVlLCJ0b2tlblR5cGUiOiJCT1QiLCJpYXQiOjE3NTU2NjMyOTQsImV4cCI6bnVsbH0.Rhj1bjZq1hfi1fT1n5FCohQ7u_OlVr6GuexNh6E7ME2OSLGl4qFzk1Dz-aeWrLDSMn9hKfZHHz1iIeaS2yf6LLoQIaiTgo2xlEbLtRRVIMUcg9LB1KtBrXwBHbt6-PctSYmpTb7RoYeTjxyk7H_h5OdFHfupOmUFr5BTWZL30p5Fpvdf8fkjkBjnOIYlOzuYmzMHscl0Ym_eRrUIBdiolWaUw_iVDBAt37y8j1HzebtwP2zF0b_wlcTmRmjRNG_F9Fvod1N7MHL_ZF6bd6eeQnEpyIizQs2Wb7OfEa_8M20IJBOBSXAxiwuzUTiV_G4taGvFyj8a6jz6aziRe86jKw"
+  loggerLevel: DEBUG 

@@ -1,0 +1,9 @@
+customer_id,first_name,last_name,email,country,state,signup_date
+C0001,Monika,Gupta,monika.gupta@example.com,USA,CA,2024-04-12
+C0002,Arjun,Patel,arjun.patel@example.com,USA,NY,2024-06-01
+C0003,Sara,Khan,sara.khan@example.com,UK,,2024-08-03
+C0004,Liam,Müller,liam.mueller@example.com,DE,,2024-05-20
+C0005,Priya,Sharma,priya.sharma@example.com,IN,,2024-07-11
+C0006,Ava,Smith,ava.smith@example.com,USA,TX,2024-03-29
+C0007,Noah,Johnson,noah.johnson@example.com,USA,CA,2024-09-05
+C0008,Maya,Gupta,maya.gupta@example.com,IN,,2024-10-02

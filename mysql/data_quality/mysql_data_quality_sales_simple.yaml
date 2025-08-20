@@ -1,0 +1,51 @@
+source:
+  type: TestSuite
+  serviceName: retail_mysql
+  sourceConfig:
+    config:
+      type: TestSuite
+      entityFullyQualifiedName: retail_mysql.default.retail_demo.sales
+processor:
+  type: orm-test-runner
+  config:
+    testCases:
+      - name: sales_table_row_count_check
+        description: Check that sales table has reasonable number of rows
+        testDefinitionName: tableRowCountToBeBetween
+        parameterValues:
+          - name: minValue
+            value: "1"
+          - name: maxValue
+            value: "100000"
+      - name: sales_id_uniqueness
+        description: Sales ID should be unique
+        testDefinitionName: columnValuesToBeUnique
+        columnName: sale_id
+      - name: sales_quantity_positive
+        description: Sales quantity should be positive
+        testDefinitionName: columnValuesToBeBetween
+        columnName: quantity
+        parameterValues:
+          - name: minValue
+            value: "1"
+          - name: maxValue
+            value: "1000"
+      - name: sales_amount_positive
+        description: Sales amount should be positive
+        testDefinitionName: columnValuesToBeBetween
+        columnName: amount
+        parameterValues:
+          - name: minValue
+            value: "0.01"
+          - name: maxValue
+            value: "1000000.00"
+sink:
+  type: metadata-rest
+  config: {}
+workflowConfig:
+  openMetadataServerConfig:
+    hostPort: http://openmetadata_server:8585/api
+    authProvider: openmetadata
+    securityConfig:
+      jwtToken: "eyJraWQiOiJHYjM4OWEtOWY3Ni1nZGpzLWE5MmotMDI0MmJrOTQzNTYiLCJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcGVuLW1ldGFkYXRhLm9yZyIsInN1YiI6ImluZ2VzdGlvbi1ib3QiLCJyb2xlcyI6WyJJbmdlc3Rpb25Cb3RSb2xlIl0sImVtYWlsIjoiaW5nZXN0aW9uLWJvdEBvcGVuLW1ldGFkYXRhLm9yZyIsImlzQm90Ijp0cnVlLCJ0b2tlblR5cGUiOiJCT1QiLCJpYXQiOjE3NTU2NjMyOTQsImV4cCI6bnVsbH0.Rhj1bjZq1hfi1fT1n5FCohQ7u_OlVr6GuexNh6E7ME2OSLGl4qFzk1Dz-aeWrLDSMn9hKfZHHz1iIeaS2yf6LLoQIaiTgo2xlEbLtRRVIMUcg9LB1KtBrXwBHbt6-PctSYmpTb7RoYeTjxyk7H_h5OdFHfupOmUFr5BTWZL30p5Fpvdf8fkjkBjnOIYlOzuYmzMHscl0Ym_eRrUIBdiolWaUw_iVDBAt37y8j1HzebtwP2zF0b_wlcTmRmjRNG_F9Fvod1N7MHL_ZF6bd6eeQnEpyIizQs2Wb7OfEa_8M20IJBOBSXAxiwuzUTiV_G4taGvFyj8a6jz6aziRe86jKw"
+  loggerLevel: INFO 
